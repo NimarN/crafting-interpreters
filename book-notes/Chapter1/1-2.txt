@@ -1,0 +1,64 @@
+The Parts of a Language
+    Scanning
+        - Scanning (lexing / lexical analysis) is the first step 
+        - A scanner takes in the linear stream of characters and chunks them together into a series
+            of something more akin to words. In programming these "words" are called tokens
+            Token examples: 123, "hi!" min
+    Parsing 
+        - This is where syntax gets a grammar. The ability to compose larger expressions/statements out 
+            of smaller parts 
+        - A parser takes the flat sequence of tokens and contructs a tree structure that mirrors the nested 
+            structure of the grammar 
+        - These trees are called parse trees, abstract syntax trees, trees
+    
+    Static Analysis 
+        - First bit of analysis that most languages do is called binding or resolution. For each identifier we find where 
+            the name was defined and wire the two together. This is where scope comes into play
+        - For statically typed languages this is also where type checking occurs. Once we know where an identifier is declared, 
+            we can also figure out its type. If the types don't support whatever operation the type is being used for, this is where we can 
+            report a type error.
+        - The semantic insight from analysis needs to be stored somewhere, There are a few options: 
+            - Stored back as attributed to the syntax tree itself (as metadata or extra fields in the nodes)
+            - stored in a lookup table off to the side. Typically the keys to this table are identifiers (names of variables and declarations)
+                In this case we call this a symbol table and the value it associated with each key tell us what that identifier refers to
+            - Create an entire new data structure basedon the tree that more direcrly expresses the semantics of the code
+    
+    These steps so far ^ is what is considered the "front end" of the implementation
+
+    Intermediate Representations (IR)
+        - The front end is specific to the source language the code is written in. The backend is concerned with the final architecture where 
+            the program will run. In teh middle the code may be stored in some intermediate representation which isn't tightly tied to the source 
+            or destination forms. 
+        - Without an IR if you wanted to build a compilers for 3 languages to run on 3 different hardwares we would need 9 different compilers
+        - With an IR you only need to build one front end and one back end and share the IR among implementations
+    
+    Optimization
+        - Once we understand what the user's program means, we are free to swap it out with a different program that has the same semantics but implements 
+            it more effeciently 
+        - Example: Constant folding - If some expression always evaluates to the same value we can do eval at compile time and replace the code for the 
+            expression with its results
+            User types: val result = (1+2) * 3 ;
+            Compiler changes code to: val result = 9;
+    
+    Code Generation
+
+        - After applying all the optimizations to the user's program the last step is converting it to a form the machine can actuallt run 
+            In other words, generating code or code gen regers to teh kind of primatie assembly-like instructions a CPU runs
+        - This is where the backend lives
+        - Choices need to be made 
+            - Generate instructions for a real or Virtual CPU ?
+        - Generating code that can be sent straght to a chip means the compiler is tied to a specific architecture
+            If your compiler targets x86 machine code, it will not run on an ARM device
+        - To get around this, compilters were made to produce virtual machine code. Instead of intructions for a real chip they produced code for a hypothetical, idealized machine
+            called p-code (for portable) or bytecode ( each instruction is often a single byte long)
+        
+    Virutal machine
+        - If your cmpiler produces bytecode , since there is no chip that speaks bytecode it is your job to translate. 
+        - There are two options 
+            - Write a mini-compiler for each target architecture that converts the bytecode to native code. You still need to do work for each 
+                chip you support but the last stage is pretty simple and you get to reuse the rest of the compiler pipeline across the machines you support. 
+                You are basically using your bytecode as an intermediate representation
+            Note: The farther down the pipeline you push the architecture specific work , the more of the earlier phases you can share across architectures
+                    However, many optimizations like register allocation and instruction selection work best when they know the strengths and capabilites of a specific chip.
+            - The Other option is you can write a Virtual Machine, a program that emulates a hypothetical chip supporting your virtual architecture at runtime. Running bytecode on a VM is
+                slower than translating it to native code ahead of time because every instruction must be simulated at runtime each time it executes
