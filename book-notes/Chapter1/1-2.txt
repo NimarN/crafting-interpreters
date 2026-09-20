@@ -62,3 +62,38 @@ The Parts of a Language
                     However, many optimizations like register allocation and instruction selection work best when they know the strengths and capabilites of a specific chip.
             - The Other option is you can write a Virtual Machine, a program that emulates a hypothetical chip supporting your virtual architecture at runtime. Running bytecode on a VM is
                 slower than translating it to native code ahead of time because every instruction must be simulated at runtime each time it executes
+    Runtime
+        - If program is compiled into machine code we tell the operating system to load the executable and off it goes.
+        - If we compiled it to bytecode we need to start up the VM and load the program into that 
+        - For most cases we usually need some service that our language provides while the program is running,
+            for example if the language automatically manages memory we would need a garbase collector going in order to reclaim unused bits. 
+            If our langugae supports "instance of" tests we need some representation to keep track of the type of each during execution
+    
+Shortcuts and Alternate Routes
+
+    Single pass compilers 
+        - Some simple compilers interleave parsing, analysis, and code generation so that they produce output code directly in the parser without ever allocating any syntax trees or other IRs
+        - Single pass compilers restrict the design of the language. Since there is no intermediate data structures to store global information, you 
+            dont revisit previously parsed part of the code. 
+    
+    Tree-walk interpreters 
+        - Some programming languages begin executing code right after parsing it to an AST ( maybe some static analysis applied )
+        - To run the program, the interpreter traverses the syntax tree one branch and leaf at a time, evaluating each node as it goes. 
+    
+    Transpilers 
+
+    - Write a front end for your language. Then, in the back end, instead of doing all the work to lower the semantics to some primative target language, you produce a 
+        string of valid source code for some other language that's just about as high level as yours. 
+        Then you use existing compilation tools for that language as your escape route down to something you can execute
+    - This was called a source to source compiler or transcompiler. Now known as transpiler
+
+    Just in time Compilation 
+        - On the end user's machine, when the program is loaded, you compile it to native code for the architecture their computer supports. 
+
+Compilers and Interpreters 
+    - What's the difference between a compiler and an interpreter ? 
+        Compiling is an implementation technique that involves translating a source language to some other - usually lower level form.  
+            When you generate bytecode or machine code, you are compiling. When you transpile to another high level language, you are compiling too.
+        When we say a language implementation is a compler we mean it translates source code to some other form but doesn't execute it. The user has to take the resulting output 
+        and Run it themselves
+        When we say an implementation is an interpreter we mean it takes the source code and executes it immediately. It runs programs "from source"
