@@ -1,0 +1,75 @@
+The Lox Language
+
+Dynamic Typing 
+    - Lox is dynamically types, meaning variables can store values of any type , and a single 
+        variable can store values of different types at different times. 
+    - Performing an operation on valus of the wrong type will be detected as an error at runtime and reported
+    - Static Type System is more work to learn and implement. 
+
+
+Automatic Memory Management
+    - Two main techniques for managing memory 
+        - reference counting 
+        - tracing garbage collection (garbage collection or GC)
+    - Ref counters are much simpler to implement however has their limitations, eventually languages that started with reference counting 
+        ended with tracing GC
+    - In the book we will be writing our own garbage collector
+
+Data types
+In Lox there are the following data types: 
+    - Booleans: 
+        - Lox has a dedicated Boolean type 
+            true;
+            false;
+    - Numbers: 
+        - Lox has only one kind of number: doble-precision floating point
+            1234; // An Integer
+            12.34; // A decimal number 
+    - Strings 
+        - Enclosed in double quotes
+            "I am a string"
+    - Nil 
+        - In lox: nil
+        - There are good arguments for not having a null value in a language since null pointers can cause issues.
+            If we were developing a statically typed language it would be worth to leave it out. But in a dynamically typed language , 
+            eliminating it is harder than having it. 
+
+Expressions 
+    - Arithmetic
+    +, -, * /
+
+    - Comparison and equality 
+    < , <= , > , >= , ==, != 
+
+    - Logical Operators
+        - ! ( not operator)
+        - and 
+        - or
+    
+    - Precendence and grouping
+        - You can use () to group 
+    
+Statements 
+    - Expressions main job is to produce a value, a statement's job is to produce an effect. 
+    - ex: 
+        print "Hello, world";
+        "some expression";
+
+        If you want to pack a series of statements where a single one is expected you can wrap them in 
+        a block : 
+
+        {
+            print "One statement";
+            print "Two statements";
+        }
+Variables
+    - You declare variables using var statements. If you omit the initializer, the value defaults to nil
+    - ex: 
+        var imAVariable = "here is my value";
+        var iAmNil;
+    - Once delcared you you can naturally access and assign a variable using its name 
+    - ex: 
+        var breakfast = "bagels";
+        print breakfast; // "bagels"
+        var breakfast = "eggs"; 
+        print breakfast // "eggs"
