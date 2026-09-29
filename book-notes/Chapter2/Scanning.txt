@@ -1,0 +1,62 @@
+Scanning 
+    The first step in any compiler or interpreter is scanning. The scanner takes in raw source code as a series of characters and 
+    groups into a series of chunks called tokens. Tokens are meaningful words and punctuation that make up the language's grammar. 
+    
+
+Error Handling 
+    If you care about making a language that's actually usable, then handling errors gracefully is vital
+    The tools a language provides for dealing with errors make up a large portion of user interface. 
+    When errors happen it is up to us to give the user all the information they need to understand what went 
+    wrong and guide them gently back to where they are trying to go
+
+    The reason to pull the error reporting into the Lox class instead of the scanner or other phases is because it is good practice to separate the code that 
+    generates the errors from the code that reports them. 
+
+    Various phases of the front end will detect errors, but it's not their job to know how to presen that to the user. 
+
+Lexemes and Tokens
+
+    var language = "lox";
+
+    In lexical analysis the job is to scan through the list of characters and group them together into the smallest sequences that still represent 
+    something.  Each of these blobs of charagers is called a lexeme 
+
+    In the above example the lexemes are as follows: 
+
+    [var] [language] [=] ["lox"] [;]
+
+    The lexemes are the the raw substrings of the source code. However in the process of grouping character sequences into lexemes, we stumble upon useful information. 
+    Bunding the lexemes with useful data results in a token.
+
+Token type
+
+    Keywords are part of the shape of the language's grammar, so the parse often has code like 
+        "If the next token is while then do ..."
+    That means the parser wants to know not just that it has a lexeme for some identifier but that it has a reserved word, and which keyword it is. 
+
+
+Literal value
+    There are lexemes for literal values - numbers and strings, etc. 
+    Since the scanner has to walk each character in the literal to correctly identify it, 
+    it can also conver that textual representation of a value to the living runtime object that will be used by the interpreter later.
+
+Regular Languages and Expressions
+    The core of the scanner is a loop. Starting at the first character in the source code, the scanner figures out what lexeme the character belongs to 
+    and consumes it along with any other character that belongs to taht lexeme. When it reaches the end of that lexeme it emits a token
+    This loop continues until the end of the file is reached. 
+
+    The rules that determine how a language groups characters into lexemes its called its lexical grammar. 
+    In lox , the rules of that grammar are simple enough for the language to be classified as a regular language. 
+    The same "regular" as in regex
+
+    You can precisely recognize all the different lexemes for Lox using regexes. Tools like Lex or Flex are designed to let you do this, You give them a handful of regexes 
+    and they give you a complete scanner back
+
+Recognizing Lexemes
+    In each turn of the loop, we scan a single token. 
+    Imagine if every lexeme were only a single character long. All we would need to do is consume the next character and pick a token type for it
+    Several lexemes are only a single character in Lox, so we start with those
+
+Lexical errors 
+    What happens if a user throws a source file containing characters Lox doesn't use. 
+    We can report an error
